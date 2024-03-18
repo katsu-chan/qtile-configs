@@ -265,5 +265,5 @@ os.environ["XDG_SESSION_DESKTOP"] = "wlroots"
 os.environ["XDG_CURRENT_DESKTOP"] = "wlroots"
 
 from subprocess import call, DEVNULL
-call("./config.sh", stdout=DEVNULL, stderr=DEVNULL)
+call("/home/eve/.config/qtile/config.sh", stdout=DEVNULL, stderr=DEVNULL)
 
