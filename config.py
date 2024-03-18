@@ -264,6 +264,6 @@ wmname = "LG3D"
 os.environ["XDG_SESSION_DESKTOP"] = "wlroots"
 os.environ["XDG_CURRENT_DESKTOP"] = "wlroots"
 
-from subprocess import call
-call("./config.sh")
+from subprocess import call, DEVNULL
+call("./config.sh", stdout=DEVNULL, stderr=DEVNULL)
 
