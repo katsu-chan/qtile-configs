@@ -25,6 +25,7 @@
 # SOFTWARE.
 
 from libqtile import bar, layout, widget
+from libqtile.backend.wayland import InputConfig
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
@@ -249,7 +250,9 @@ reconfigure_screens = True
 auto_minimize = True
 
 # When using the Wayland backend, this can be used to configure input devices.
-wl_input_rules = None
+wl_input_rules = {
+  "*": InputConfig(tap=True, natural_scroll=True),
+}
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the
