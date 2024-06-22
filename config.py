@@ -26,6 +26,7 @@
 
 from libqtile import bar, layout, widget
 from libqtile.backend.wayland import InputConfig
+from libqtile.backend.wayland.inputs import CLICK_METHODS
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
@@ -95,15 +96,60 @@ keys = [
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
-    Key(["mod1", "control"], "F1", lazy.core.change_vt(1), desc="Go to virtual console 1"),
-    Key(["mod1", "control"], "F2", lazy.core.change_vt(2), desc="Go to virtual console 2"),
-    Key(["mod1", "control"], "F3", lazy.core.change_vt(3), desc="Go to virtual console 3"),
-    Key(["mod1", "control"], "F4", lazy.core.change_vt(4), desc="Go to virtual console 4"),
-    Key(["mod1", "control"], "F5", lazy.core.change_vt(5), desc="Go to virtual console 5"),
-    Key(["mod1", "control"], "F6", lazy.core.change_vt(6), desc="Go to virtual console 6"),
-    Key(["mod1", "control"], "F7", lazy.core.change_vt(7), desc="Go to virtual console 7"),
-    Key(["mod1", "control"], "F8", lazy.core.change_vt(8), desc="Go to virtual console 8"),
-    Key(["mod1", "control"], "F9", lazy.core.change_vt(9), desc="Go to virtual console 9"),
+    Key(
+        ["mod1", "control"],
+        "F1",
+        lazy.core.change_vt(1),
+        desc="Go to virtual console 1",
+    ),
+    Key(
+        ["mod1", "control"],
+        "F2",
+        lazy.core.change_vt(2),
+        desc="Go to virtual console 2",
+    ),
+    Key(
+        ["mod1", "control"],
+        "F3",
+        lazy.core.change_vt(3),
+        desc="Go to virtual console 3",
+    ),
+    Key(
+        ["mod1", "control"],
+        "F4",
+        lazy.core.change_vt(4),
+        desc="Go to virtual console 4",
+    ),
+    Key(
+        ["mod1", "control"],
+        "F5",
+        lazy.core.change_vt(5),
+        desc="Go to virtual console 5",
+    ),
+    Key(
+        ["mod1", "control"],
+        "F6",
+        lazy.core.change_vt(6),
+        desc="Go to virtual console 6",
+    ),
+    Key(
+        ["mod1", "control"],
+        "F7",
+        lazy.core.change_vt(7),
+        desc="Go to virtual console 7",
+    ),
+    Key(
+        ["mod1", "control"],
+        "F8",
+        lazy.core.change_vt(8),
+        desc="Go to virtual console 8",
+    ),
+    Key(
+        ["mod1", "control"],
+        "F9",
+        lazy.core.change_vt(9),
+        desc="Go to virtual console 9",
+    ),
     # Run xeyes
     Key([mod], "y", lazy.spawn("xeyes")),
 ]
@@ -181,25 +227,29 @@ screens = [
                 widget.GroupBox(),
                 widget.Prompt(),
                 # widget.TaskList(),
-                widget.WindowName(format='{state}{name}'),
+                widget.WindowName(format="{state}{name}"),
                 widget.Chord(
                     chords_colors={
                         "launch": ("#ff0000", "#ffffff"),
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-                #widget.TextBox("default config", name="default"),
-                #widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
+                # widget.TextBox("default config", name="default"),
+                # widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 # widget.StatusNotifier(),
                 widget.Systray(),
                 widget.Sep(),
                 widget.KeyboardLayout(configured_keyboards=["us colemak", "ru"]),
                 widget.Sep(),
-                widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
-                #widget.Spacer(length=4),
+                widget.Battery(),
                 widget.Sep(),
-                widget.QuickExit(default_text='[X]', countdown_format='[{}]', foreground="#d75f5f"),
+                widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
+                # widget.Spacer(length=4),
+                widget.Sep(),
+                widget.QuickExit(
+                    default_text="[X]", countdown_format="[{}]", foreground="#d75f5f"
+                ),
             ],
             24,
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
@@ -209,6 +259,8 @@ screens = [
         # By default we handle these events delayed to already improve performance, however your system might still be struggling
         # This variable is set to None (no cap) by default, but you can set it to 60 to indicate that you limit it to 60 events per second
         # x11_drag_polling_rate = 60,
+        wallpaper="/home/eve/krevetki.jpg",
+        wallpaper_mode="stretch",
     ),
 ]
 
@@ -227,12 +279,14 @@ mouse = [
 ]
 
 keys.extend(
-    [Key(
-        [mod],
-        "space",
-        lazy.widget["keyboardlayout"].next_keyboard(),
-        desc="Next keyboard layout",
-    )]
+    [
+        Key(
+            [mod],
+            "space",
+            lazy.widget["keyboardlayout"].next_keyboard(),
+            desc="Next keyboard layout",
+        )
+    ]
 )
 
 dgroups_key_binder = None
@@ -251,7 +305,8 @@ auto_minimize = True
 
 # When using the Wayland backend, this can be used to configure input devices.
 wl_input_rules = {
-  "*": InputConfig(tap=True, natural_scroll=True),
+    "*": InputConfig(tap=True, natural_scroll=True),
+    #    "type:touchpad": InputConfig(tap=False, click_method="button_areas"),
 }
 
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
@@ -268,5 +323,5 @@ os.environ["XDG_SESSION_DESKTOP"] = "wlroots"
 os.environ["XDG_CURRENT_DESKTOP"] = "wlroots"
 
 from subprocess import call, DEVNULL
-call("/home/eve/.config/qtile/config.sh", stdout=DEVNULL, stderr=DEVNULL)
 
+call("/home/eve/.config/qtile/config.sh", stdout=DEVNULL, stderr=DEVNULL)
