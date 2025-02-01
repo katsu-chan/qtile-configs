@@ -32,6 +32,15 @@ from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 import os
 
+
+@lazy.function
+def brightness(qtile, val=16, increase=False):
+    with open("/sys/class/backlight/amdgpu_bl1/brightness", "w+") as f:
+        f.write(
+            str(int(f.readline()) + val * (int(increase) * 2 - 1))
+        )  # increase ? read + val : read - val
+
+
 mod = "mod4"
 # terminal = guess_terminal()
 terminal = "wezterm"
@@ -152,6 +161,9 @@ keys = [
     ),
     # Run xeyes
     Key([mod], "y", lazy.spawn("xeyes")),
+    # Brightness
+    Key([], 232, brightness(), desc="brightness--"),
+    Key([], 233, brightness(increase=True), desc="brightness++"),
 ]
 
 groups = [Group(i) for i in "123456789"]
