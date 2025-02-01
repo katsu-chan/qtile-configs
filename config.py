@@ -241,6 +241,10 @@ ticker = widget.CryptoTicker(
 
 ticker.add_callbacks({"Button1": ticker.force_update})
 
+battery = widget.Battery()
+
+battery.add_callbacks({"Button1": battery.force_update})
+
 screens = [
     Screen(
         bottom=bar.Bar(
@@ -265,7 +269,8 @@ screens = [
                 widget.Sep(),
                 widget.KeyboardLayout(configured_keyboards=["us colemak", "ru"]),
                 widget.Sep(),
-                widget.Battery(),
+                battery,
+                widget.Sep(),
                 ticker,
                 widget.Sep(),
                 widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
