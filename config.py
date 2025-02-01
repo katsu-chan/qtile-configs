@@ -267,7 +267,9 @@ screens = [
                 # widget.StatusNotifier(),
                 widget.Systray(),
                 widget.Sep(),
-                widget.KeyboardLayout(configured_keyboards=["us colemak", "ru"]),
+                widget.KeyboardLayout(
+                    configured_keyboards=["us colemak", "ru rulemak", "us"]
+                ),
                 widget.Sep(),
                 battery,
                 widget.Sep(),
