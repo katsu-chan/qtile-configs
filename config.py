@@ -230,6 +230,17 @@ widget_defaults = dict(
 )
 extension_defaults = widget_defaults.copy()
 
+ticker = widget.CryptoTicker(
+    crypto="TON",
+    currency="USDT",
+    api="binance",
+    update_interval=1,
+    #    mouse_callbacks={"Button1": ticker.force_update},
+    format="{crypto}: {symbol}{amount:,.3f}",
+)
+
+ticker.add_callbacks({"Button1": ticker.force_update})
+
 screens = [
     Screen(
         bottom=bar.Bar(
@@ -255,6 +266,7 @@ screens = [
                 widget.KeyboardLayout(configured_keyboards=["us colemak", "ru"]),
                 widget.Sep(),
                 widget.Battery(),
+                ticker,
                 widget.Sep(),
                 widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
                 # widget.Spacer(length=4),
