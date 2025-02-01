@@ -320,6 +320,23 @@ keys.extend(
     ]
 )
 
+keys.extend(
+    [
+        Key(
+            [mod],
+            "s",
+            lazy.spawn('bash -c "grim"'),
+            desc="Fullscreen screenshot to disk",
+        ),
+        Key(
+            [mod, "control"],
+            "s",
+            lazy.spawn('bash -c "grim - | wl-copy"'),
+            desc="Fullscreen screenshot to copypaste buffer",
+        ),
+    ]
+)
+
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
 follow_mouse_focus = True
